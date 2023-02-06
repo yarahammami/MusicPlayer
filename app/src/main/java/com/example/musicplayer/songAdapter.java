@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -43,8 +45,8 @@ public class songAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         //set values to views
         viewHolder.titleHolder.setText(song.getTitle());
-        viewHolder.durationHolder.setText(String.valueOf(song.getDuration()));
-        viewHolder.sizeHolder.setText(String.valueOf(song.getSize()));
+        viewHolder.durationHolder.setText(getDuration(song.getDuration()));
+        viewHolder.sizeHolder.setText(getSize(song.getSize()));
 
         //artwork
         Uri artworkUri = song.getArtworkUri();
@@ -90,6 +92,55 @@ public class songAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void filterSongs(List<Song> filteredlist){
         songs = filteredlist;
         notifyDataSetChanged();
+    }
+
+    private String getDuration(int totalDuration){
+        String totalDurationText;
+
+        int hrs = totalDuration/(000*60*60);
+        int min = (totalDuration%(1000*60*60))/(1000*60);
+        int secs = (((totalDuration%(1000*60*60))%(1000*60*60))%(1000*60*60))/1000;
+
+        if(hrs < 1){
+            totalDurationText = String.format("%02d:%02d",min, secs);
+
+        }
+        else{
+            totalDurationText = String.format("%1d:%02d:%02d",hrs ,min, secs);
+        }
+        return totalDurationText;
+    }
+
+
+
+    //size
+    private String getSize(long bytes){
+        String hrSize;
+
+        double k = bytes/1024.0;
+        double m = ((bytes/1024.0)/1024.0);
+        double g = (((bytes/1024.0)/1024.0)/1024.0);
+        double t =  ((((bytes/1024.0)/1024.0)/1024.0)/1024.0);
+
+        //the format
+        DecimalFormat dec = new DecimalFormat("0.00");
+
+        if(t>1){
+            hrSize = dec.format(t).concat(" TB");
+        }
+        else if(g > 1){
+            hrSize = dec.format(g).concat(" GB");
+        }
+        else if(m > 1){
+            hrSize = dec.format(m).concat(" MB");
+        }
+        else {
+            hrSize = dec.format(k).concat(" KB");
+        }
+
+
+
+        return hrSize;
     }
     
 

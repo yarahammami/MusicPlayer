@@ -191,7 +191,5 @@ Toast.makeText(this,"you canceled showing songs", Toast.LENGTH_SHORT).show();
         recyclerView.setAdapter(songAdapter);
 
 
-
-
     }
 }
